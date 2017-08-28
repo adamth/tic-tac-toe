@@ -22421,9 +22421,12 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // Gameboard is a 3x3 grid of clickable cells that can be either an X or an O
 
+var COLS = 3;
+
 var INIT_STATE = {
     cells: [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
-    turn: false
+    turn: false,
+    victory: false
 };
 
 var Gameboard = function (_Component) {
@@ -22436,10 +22439,94 @@ var Gameboard = function (_Component) {
 
         _this.state = INIT_STATE;
         _this.handleCellClick = _this.handleCellClick.bind(_this);
+        _this.checkVictory = _this.checkVictory.bind(_this);
         return _this;
     }
 
     _createClass(Gameboard, [{
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate() {
+            // Check to see if game is over
+            this.checkVictory();
+        }
+    }, {
+        key: 'checkVictory',
+        value: function checkVictory() {
+            // Check rows   
+            for (var row = 0; row < COLS; row++) {
+                var sum = 0;
+                for (var col = 0; col < COLS; col++) {
+                    var currentCell = this.state.cells[row * COLS + col];
+                    if (currentCell !== undefined) {
+                        if (currentCell === 'X') {
+                            sum++;
+                        } else {
+                            sum--;
+                        }
+                        if (sum === 3) {
+                            console.log('X is the winner!');
+                        } else if (sum === -3) {
+                            console.log('O is the winner!');
+                        }
+                    }
+                }
+            }
+            // Check diagonal
+            var topLeft = this.state.cells[0];
+            var topRight = this.state.cells[COLS - 1];
+            var middle = this.state.cells[1 * COLS + 1];
+            var bottomLeft = this.state.cells[2 * COLS + 0];
+            var bottomRight = this.state.cells[2 * COLS + 2];
+            if (middle !== undefined) {
+                if (topLeft !== undefined && bottomRight !== undefined) {
+                    var _sum = 0;
+                    if (topLeft === 'X') {
+                        _sum++;
+                    } else {
+                        _sum--;
+                    }
+                    if (middle === 'X') {
+                        _sum++;
+                    } else {
+                        _sum--;
+                    }
+                    if (bottomRight === 'X') {
+                        _sum++;
+                    } else {
+                        _sum--;
+                    }
+                    if (_sum === 3) {
+                        console.log('X is the winner!');
+                    } else if (_sum === -3) {
+                        console.log('O is the winner!');
+                    }
+                }
+                if (topRight !== undefined && bottomLeft !== undefined) {
+                    var _sum2 = 0;
+                    if (topRight === 'X') {
+                        _sum2++;
+                    } else {
+                        _sum2--;
+                    }
+                    if (middle === 'X') {
+                        _sum2++;
+                    } else {
+                        _sum2--;
+                    }
+                    if (bottomLeft === 'X') {
+                        _sum2++;
+                    } else {
+                        _sum2--;
+                    }
+                    if (_sum2 === 3) {
+                        console.log('X is the winner!');
+                    } else if (_sum2 === -3) {
+                        console.log('O is the winner!');
+                    }
+                }
+            }
+        }
+    }, {
         key: 'handleCellClick',
         value: function handleCellClick(key) {
             // Check to see if the cell has already been clicked
