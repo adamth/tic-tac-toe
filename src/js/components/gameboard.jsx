@@ -6,7 +6,7 @@ import Cell from './cell.jsx';
 const COLS = 3;
 
 const INIT_STATE = {
-    cells: [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
+    cells: [],
     turn: false,
     victory: false
 };
@@ -21,7 +21,9 @@ class Gameboard extends Component {
 
     componentDidUpdate() {
         // Check to see if game is over
-        this.checkVictory();
+        if (!this.state.victory) {
+            this.checkVictory();
+        }    
     }
 
     checkVictory() {
@@ -37,8 +39,39 @@ class Gameboard extends Component {
                         sum--;
                     }
                     if (sum === 3) {
+                        this.setState({
+                            victory: 'X'
+                        });
                         console.log('X is the winner!');
                     } else if (sum === -3) {
+                        this.setState({
+                            victory: 'O'
+                        });
+                        console.log('O is the winner!');
+                    }
+                }            
+            }
+        }
+        // Check cols   
+        for (let col = 0; col < COLS; col++) {
+            let sum = 0;
+            for (let row = 0; row < COLS; row++) {
+                const currentCell = this.state.cells[(row * COLS) + col];
+                if (currentCell !== undefined) {
+                    if (currentCell === 'X') {
+                        sum++;
+                    } else {
+                        sum--;
+                    }
+                    if (sum === 3) {
+                        this.setState({
+                            victory: 'X'
+                        });
+                        console.log('X is the winner!');
+                    } else if (sum === -3) {
+                        this.setState({
+                            victory: 'O'
+                        });
                         console.log('O is the winner!');
                     }
                 }            
@@ -69,8 +102,14 @@ class Gameboard extends Component {
                     sum--;
                 }
                 if (sum === 3) {
+                    this.setState({
+                            victory: 'X'
+                        });
                     console.log('X is the winner!');
                 } else if (sum === -3) {
+                    this.setState({
+                            victory: 'O'
+                        });
                     console.log('O is the winner!');
                 }
             }    
@@ -123,7 +162,7 @@ class Gameboard extends Component {
     render() {
         return (
             <div className="gameboard">
-                {this.renderCells()}
+                {this.state.victory ? `The winner is ${this.state.victory}` : this.renderCells()}       
             </div>
         );
     }
