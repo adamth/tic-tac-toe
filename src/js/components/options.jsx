@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 
 class Options extends Component {
     render() {
+        const { victory, handleReset } = this.props;
         return (
             <div className="options">
-                Here are some options
+                <div className="reset-btn" onClick={handleReset}>{victory ? 'Replay' : 'Reset'}</div>
             </div>
         );
     }
