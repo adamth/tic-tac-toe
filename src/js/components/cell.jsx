@@ -5,7 +5,7 @@ class Cell extends Component {
     render() {
         const { id, value, handleClick } = this.props;
         return (
-            <div className="cell" onClick={() => { handleClick(id); }}>
+            <div className={`cell cell-${id}`} onClick={() => { handleClick(id); }}>
                 {value}
             </div>
         );
